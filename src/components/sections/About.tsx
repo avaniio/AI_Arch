@@ -44,16 +44,14 @@ const About = () => {
           {config.sections.about.content}
           <span className="font-bold">Turn your design dreams into reality!</span> <br />
           <br />
-          Our platform combines cutting-edge 3D generation technology with an NFT marketplace.
+          Our platform utilizes cutting-edge AI technology to generate stunning 3D architectural models.
           <br />
           <br />
-          Simply describe your ideal structure, and watch as our AI creates stunning architectural
-          models. Sell your creations or find affordable inspiration for your next project. Imagine
-          your dream home, a futuristic office, or a whimsical retreat.
+          Simply describe your ideal structure, and watch as our AI brings it to life. Imagine
+          your dream home, a futuristic office, or a whimsical retreat—all generated in seconds.
           <br />
-          <br /> Describe it, and our AI will bring it to life in 3D. Architects, find a new outlet
-          for your creativity! Design enthusiasts, discover affordable inspiration! Build, explore,
-          and profit within our innovative architecture and NFT marketplace.
+          <br /> Architects, find a new outlet for your creativity! Design enthusiasts, discover endless 
+          inspiration! Build and explore within our innovative AI architecture platform.
         </motion.p>
 
         <img src="../giphy.gif" alt="Description of GIF" className="ml-10 rounded-xl shadow-2xl" />
