@@ -1,116 +1,99 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-import { styles } from '../../constants/styles';
-import { navLinks } from '../../constants';
-import { logo, menu, close } from '../../assets';
+const navItems = [
+  { id: 'about', title: 'About', path: '/about' },
+  { id: 'projects', title: 'Projects', path: '/generate' },
+  { id: 'profile', title: 'Profile', path: '/profile' },
+];
 
 const Navbar = () => {
-  const [active, setActive] = useState<string | null>();
-  const [toggle, setToggle] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      if (scrollTop > 100) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-        setActive('');
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    const navbarHighlighter = () => {
-      const sections = document.querySelectorAll('section[id]');
-
-      sections.forEach(current => {
-        const sectionId = current.getAttribute('id');
-        // @ts-ignore
-        const sectionHeight = current.offsetHeight;
-        const sectionTop = current.getBoundingClientRect().top - sectionHeight * 0.2;
-
-        if (sectionTop < 0 && sectionTop + sectionHeight > 0) {
-          setActive(sectionId);
-        }
-      });
-    };
-
-    window.addEventListener('scroll', navbarHighlighter);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('scroll', navbarHighlighter);
-    };
-  }, []);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <nav
-      className={`${styles.paddingX} fixed  z-20 flex w-full items-center py-5 bg-blend-overlay backdrop-blur-md`} // Add the backdrop-blur class here
+      className="fixed top-0 left-0 z-50 w-full"
+      style={{ background: 'rgba(5, 5, 5, 0.6)' }}
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-16">
+        {/* Logo — left side */}
         <Link
           to="/"
-          className="flex items-center gap-2"
-          onClick={() => {
-            window.scrollTo(0, 0);
-          }}
+          className="text-xl font-black tracking-[0.12em] text-white transition-opacity hover:opacity-80"
+          onClick={() => window.scrollTo(0, 0)}
         >
-          <img src={logo} alt="logo" className="h-9 p-0" />
+          AI Arch
         </Link>
 
-        <ul className="hidden list-none flex-row gap-10 sm:flex">
-          {navLinks.map(nav => (
-            <li
-              key={nav.id}
-              className={`${
-                active === nav.id ? 'text-white' : 'text-secondary'
-              } cursor-pointer text-[18px] font-medium hover:text-white`}
-            >
-              {nav.id === 'generate' ? (
-                <Link to="/generate">{nav.title}</Link>
-              ) : (
-                <a href={`#${nav.id}`}>{nav.title}</a>
-              )}
+        {/* Desktop nav — right side */}
+        <ul className="hidden list-none items-center gap-10 sm:flex">
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <Link
+                to={item.path}
+                className={`text-[15px] font-medium transition-colors duration-200 ${
+                  location.pathname === item.path
+                    ? 'text-white'
+                    : 'text-[#888] hover:text-white'
+                }`}
+              >
+                {item.title}
+              </Link>
             </li>
           ))}
         </ul>
 
-        <div className="flex flex-1 items-center justify-end sm:hidden">
-          <img
-            src={toggle ? close : menu}
-            alt="menu"
-            className="h-[28px] w-[28px] object-contain"
-            onClick={() => setToggle(!toggle)}
-          />
-
-          <div
-            className={`${
-              !toggle ? 'hidden' : 'flex'
-            } black-gradient absolute right-0 top-20 z-10 mx-4 my-2 min-w-[140px] rounded-xl p-6`}
+        {/* Mobile hamburger */}
+        <div className="flex items-center sm:hidden">
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="flex h-8 w-8 flex-col items-center justify-center gap-[5px]"
+            aria-label="Toggle menu"
           >
-            <ul className="flex flex-1 list-none flex-col items-start justify-end gap-4">
-              {navLinks.map(nav => (
-                <li
-                  key={nav.id}
-                  className={`font-poppins cursor-pointer text-[16px] font-medium ${
-                    active === nav.id ? 'text-white' : 'text-secondary'
-                  }`}
-                  onClick={() => {
-                    setToggle(!toggle);
-                  }}
-                >
-                  {nav.id === 'generate' ? (
-                    <Link to="/generate">{nav.title}</Link>
-                  ) : (
-                    <a href={`#${nav.id}`}>{nav.title}</a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+            <span
+              className={`block h-[1.5px] w-5 bg-white transition-all duration-300 ${
+                mobileOpen ? 'translate-y-[6.5px] rotate-45' : ''
+              }`}
+            />
+            <span
+              className={`block h-[1.5px] w-5 bg-white transition-all duration-300 ${
+                mobileOpen ? 'opacity-0' : ''
+              }`}
+            />
+            <span
+              className={`block h-[1.5px] w-5 bg-white transition-all duration-300 ${
+                mobileOpen ? '-translate-y-[6.5px] -rotate-45' : ''
+              }`}
+            />
+          </button>
         </div>
+      </div>
+
+      {/* Mobile dropdown */}
+      <div
+        className={`overflow-hidden transition-all duration-300 sm:hidden ${
+          mobileOpen ? 'max-h-60' : 'max-h-0'
+        }`}
+        style={{ background: 'rgba(5, 5, 5, 0.95)' }}
+      >
+        <ul className="flex flex-col gap-4 px-6 pb-6 pt-2">
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <Link
+                to={item.path}
+                className={`block text-[15px] font-medium transition-colors ${
+                  location.pathname === item.path
+                    ? 'text-white'
+                    : 'text-[#888] hover:text-white'
+                }`}
+                onClick={() => setMobileOpen(false)}
+              >
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );
