@@ -1,11 +1,15 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import { About, Contact, Hero, Navbar, Works, StarsCanvas } from './components';
 import { useEffect } from 'react';
-import { config } from './constants/config';
-import Generate from './components/Generate.tsx';
 
-// Routing in App.js
+import Navbar from './components/layout/Navbar';
+import CustomCursor from './components/layout/CustomCursor';
+import GridBackground from './components/canvas/GridBackground';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Profile from './components/sections/Profile';
+import Generate from './components/Generate';
+import { config } from './constants/config';
+
 const App = () => {
   useEffect(() => {
     if (document.title !== config.html.title) {
@@ -15,25 +19,19 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      {/* Global layers */}
+      <CustomCursor />
+      <GridBackground />
+
+      {/* Shared navbar */}
+      <Navbar />
+
+      {/* Routes */}
       <Routes>
-       <Route path="/generate" element={<Generate/>} />
-        <Route
-          path="/"
-          element={
-            <div className="bg-primary relative z-0">
-              <div className="bg-hero-pattern bg-cover bg-center bg-no-repeat">
-                <Navbar />
-                <Hero />
-              </div>
-              <About />
-              <Works />
-              <div className="relative z-0">
-                <Contact />
-                <StarsCanvas />
-              </div>
-            </div>
-          }
-        />
+        <Route path="/" element={<Hero />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/generate" element={<Generate />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
